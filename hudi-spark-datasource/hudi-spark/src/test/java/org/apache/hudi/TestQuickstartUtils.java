@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
-public class QuickstartUtilsTest {
+public class TestQuickstartUtils {
     private static Random rand = new Random(46474747);
 
     private int numExistingKeys = 0;
