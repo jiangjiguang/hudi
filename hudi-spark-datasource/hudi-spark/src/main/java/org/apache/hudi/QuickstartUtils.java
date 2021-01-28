@@ -31,7 +31,6 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.spark.sql.Row;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -176,14 +175,17 @@ public class QuickstartUtils {
      * @return list of hoodie record updates
      */
     public List<HoodieRecord> generateUpdates(Integer n) throws IOException {
-      String randomString = generateRandomString();
-      List<HoodieRecord> updates = new ArrayList<>();
-      for (int i = 0; i < n; i++) {
-        HoodieKey key = existingKeys.get(rand.nextInt(numExistingKeys));
-        HoodieRecord record = generateUpdateRecord(key, randomString);
-        updates.add(record);
+      if (numExistingKeys == 0) {
+        throw new IllegalArgumentException("Data must have been written before performing the update operation");
       }
-      return updates;
+      String randomString = generateRandomString();
+      return IntStream.range(0, n).boxed().map(x -> {
+        try {
+          return generateUpdateRecord(existingKeys.get(rand.nextInt(numExistingKeys)), randomString);
+        } catch (IOException e) {
+          throw new HoodieIOException(e.getMessage(), e);
+        }
+      }).collect(Collectors.toList());
     }
 
     /**

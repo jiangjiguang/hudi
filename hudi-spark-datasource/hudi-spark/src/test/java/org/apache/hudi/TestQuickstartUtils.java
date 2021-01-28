@@ -1,67 +1,36 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.hudi;
 
-import org.apache.hudi.common.model.HoodieRecord;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class TestQuickstartUtils {
-    private static Random rand = new Random(46474747);
 
-    private int numExistingKeys = 0;
-
-    @Test
-    public void testGenerateUpdates() throws Exception {
-        try {
-            QuickstartUtils.DataGenerator dataGenerator = new QuickstartUtils.DataGenerator();
-            List<HoodieRecord> hoodieRecords = dataGenerator.generateUpdates(10);
-            System.out.println(hoodieRecords);
-        } catch (Exception ex) {
-            System.out.println(ex.getStackTrace());
-        }
-
-    }
-
-    @Test
-    public void test03() {
-
-        Stream<Integer> stream = IntStream.range(0, 100000000).boxed().map(i -> {
-            numExistingKeys++;
-            return 1;
-        });
-        stream.collect(Collectors.toList());
-
-        System.out.println(numExistingKeys);
-    }
-
-    @Test
-    public void test02() {
-        System.out.println(rand.nextDouble());
-        System.out.println(rand.nextDouble());
-        System.out.println(rand.nextDouble());
-        System.out.println(rand.nextDouble());
-
-    }
-
-    @Test
-    public void testConvertToStringList() throws IOException {
-        QuickstartUtils.DataGenerator dataGenerator = new QuickstartUtils.DataGenerator();
-        List<String> list = QuickstartUtils.convertToStringList(dataGenerator.generateInserts(10));
-        System.out.println(list);
-    }
-
-    @Test
-    public void testGenerateInserts() throws Exception {
-        QuickstartUtils.DataGenerator dataGenerator = new QuickstartUtils.DataGenerator();
-        List<HoodieRecord> hoodieRecords = dataGenerator.generateInserts(10);
-        System.out.println(hoodieRecords);
-    }
+  @Test
+  public void testGenerateUpdates() throws Exception {
+    QuickstartUtils.DataGenerator dataGenerator = new QuickstartUtils.DataGenerator();
+    assertEquals(dataGenerator.generateInserts(10).size(), 10);
+    assertEquals(dataGenerator.generateUpdates(10).size(), 10);
+  }
 }
