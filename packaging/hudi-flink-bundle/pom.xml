@@ -376,6 +376,7 @@
       <groupId>${hive.groupid}</groupId>
       <artifactId>hive-exec</artifactId>
       <version>${hive.version}</version>
+      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>javax.mail</groupId>
